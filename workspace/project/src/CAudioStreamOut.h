@@ -2,7 +2,7 @@
  * CAudioStreamOut.h
  *
  *  Created on: Nov 17, 2019
- *      Author: NIKHIL
+ *      Author: Chaithra Mahadeva
  */
 
 #ifndef CAUDIOSTREAMOUT_H_

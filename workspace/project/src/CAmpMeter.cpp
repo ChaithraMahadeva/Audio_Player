@@ -2,7 +2,7 @@
  * CAmpMeter.cpp
  *
  *  Created on: 21.10.2019
- *      Author: Wirth
+ *  	Author: Chaithra Mahadeva
  */
 #include <iostream>
 //#include <stdlib.h>
@@ -13,7 +13,7 @@ using namespace std;
 #include "CAmpMeter.h"
 
 CAmpMeter::CAmpMeter() {
-	// todo: initialize all attributes (see UML class diagram)
+	// initialize all attributes (see UML class diagram)
 	m_scmode = SCALING_MODE_LIN;
 	m_scMax = 0;
 	m_thresholds[0] = 0;
@@ -22,7 +22,7 @@ CAmpMeter::CAmpMeter() {
 
 void CAmpMeter::init(float min, float max, SCALING_MODES scmode,
 		int logScaleMin, CIOWarrior *iowdev) {
-	// todo: initialize the amplitude meter on the basis of the given parameter values
+	// initialize the amplitude meter on the basis of the given parameter values
 	// The maximum absolute value of min and max is taken for the maximum of the scale.
 	// The thresholds are calculated for a LED line with 8 LEDs in dependence of the given scaling mode (scmode).
 	// Linear scaling: 0 ... maximum of the scale
@@ -53,7 +53,6 @@ bool CAmpMeter::write(float *databuf, unsigned long databufsize) {
 }
 
 bool CAmpMeter::write(float data) {
-	// todo:
 	// if an IOWarrior is connected it gets the appropriate bar pattern and writes it to the IOWarrior
 	// otherwise it does nothing
 	if (!m_iowdev->open())
@@ -65,7 +64,6 @@ bool CAmpMeter::write(float data) {
 }
 
 void CAmpMeter::print(float data) {
-	//todo:
 	// get the appropriate bar pattern
 	// print the bar pattern in binary format on the screen (see CIOWarrior::printData() method for an example)
 	unsigned char pat = _getBarPattern(data);
@@ -86,7 +84,7 @@ void CAmpMeter::print(float *databuf, unsigned long databufsize) {
 
 unsigned char CAmpMeter::_getBarPattern(float data) {
 	char pat = 0;
-	// todo: Calculate appropriate bar pattern pat for data. Data is a linear value in any case. The bar pattern may be used
+	// Calculate appropriate bar pattern pat for data. Data is a linear value in any case. The bar pattern may be used
 	// for visualization on the screen or the LED line.
 	// Example: pat is 0b11111111 if the absolute value of data is equal to the maximum data value (m_scMax)
 	// In dependence of the scaling mode (m_scmode), the absolute value of data (linear scaling) or

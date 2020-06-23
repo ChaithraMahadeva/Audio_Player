@@ -2,7 +2,7 @@
  * CAmpMeter.h
  *
  *  Created on: 21.10.2019
- *      Author: Wirth
+ *     	Author: Chaithra Mahadeva
  */
 
 #ifndef CAMPMETER_H_

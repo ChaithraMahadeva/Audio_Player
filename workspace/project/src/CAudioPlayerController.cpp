@@ -2,7 +2,7 @@
  * CAudioPlayerController.cpp
  *
  *  Created on: 09.01.2020
- *      Author: Wirth
+ *     	Author: Chaithra Mahadeva
  */
 ////////////////////////////////////////////////////////////////////////////////
 // Header
@@ -53,7 +53,7 @@ void CAudioPlayerController::run(CUserInterface *pui) {
 
 	//////////////////////////////////////////////////
 	// main menue of the player
-	// todo: Add further menu items, the corresponding cases and method calls to the following code
+	// Add further menu items, the corresponding cases and method calls to the following code
 	// note: the last item of the menu must be empty (see CUserInterfaceCmdIOW code)
 	string mainMenue[] = { "select sound", "select filter","Play Sound","select Amplitude scale",
 			"manage sound collection","manage filter collection", "terminate player", "" };
@@ -109,7 +109,7 @@ void CAudioPlayerController::init() {
 	if (false == m_soundColl.open("SoundcollectionDB", "root"))
 		throw CASDDException(SRC_Database, -1, m_soundColl.getSQLErrorMsg());
 	///////////////////
-	// todo: initialize other attributes if necessary
+	// initialize other attributes if necessary
 }
 
 void CAudioPlayerController::chooseSound() {
@@ -365,7 +365,6 @@ void CAudioPlayerController::manageSoundCollection(){
 	sndfolder = m_ui->getUserInputPath();
 
 	//////////////////////////////////////////
-	// Code from Lab04prep_DBAdminInsert and Lab04prep_insertFilterTest
 	// iterates through the folder that the user entered and inserts all
 	// the filters it finds in the folder (reading txt files)
 	dirent *entry;
@@ -408,7 +407,6 @@ void CAudioPlayerController::manageFilterCollection() {
 	fltfolder = m_ui->getUserInputPath();
 
 	//////////////////////////////////////////
-	// Code from Lab04prep_DBAdminInsert and Lab04prep_insertFilterTest
 	// iterates through the folder that the user entered and inserts all
 	// the filters it finds in the folder (reading txt files)
 	dirent *entry;

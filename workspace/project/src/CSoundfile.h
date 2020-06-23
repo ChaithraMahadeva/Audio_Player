@@ -2,7 +2,7 @@
  * CSoundfile.h
  *
  *  Created on: 24.11.2019
- *      Author: Wirth
+ *      Author: Chaithra Mahadeva
  */
 
 #ifndef SRC_CSOUNDFILE_H_

@@ -2,7 +2,7 @@
  * CAudioStreamOut.cpp
  *
  *  Created on: Nov 17, 2019
- *      Author: NIKHIL
+ *      Author: Chaithra Mahadeva
  */
 #include <iostream>
 #include "CAudioStreamOut.h"

@@ -2,7 +2,7 @@
  * File.cpp
  *
  *  Created on: 14.11.2019
- *      Author: A. Wirth
+ *      Author: Chaithra Mahadeva
  */
 #include <iostream>
 #include <string.h>
@@ -288,7 +288,6 @@ int CFilterFile::getNumACoeffs()
 }
 
 
-// Lab03:
 void CFilterFile::getFs(string path, int* fs, int& numFs)
 {
 	FILE* pFile=fopen(path.c_str(),"r");

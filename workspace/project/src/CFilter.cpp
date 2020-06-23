@@ -2,7 +2,7 @@
  * CFilter.cpp
  *
  *  Created on: 11.09.2019
- *      Author: Wirth
+ *      Author: Chaithra Mahadeva
  */
 #include <math.h>
 #include "CASDDException.h"
@@ -102,7 +102,7 @@ bool CFilter::_filter(float* x, float* y, int framesPerBuffer, int bufsize)
 
 bool CFilter::_filterDelay(float* x, float* y, int framesPerBuffer, int bufsize)
 {
-	// toDo please insert your optimized code here
+	// please insert your optimized code here
 	// if you still have not optimized the filter algorithm for delay filters,
 	// the unfiltered signal will be passed back
 	for(int k=0; k < bufsize; k++)

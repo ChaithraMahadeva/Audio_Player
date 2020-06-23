@@ -2,7 +2,7 @@
  * CSoundFile.cpp
  *
  *  Created on: 24.11.2019
- *      Author: Wirth
+ *      Author: Chaithra Mahadeva
  */
 
 #include <iostream>

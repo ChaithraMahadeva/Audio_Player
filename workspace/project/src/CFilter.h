@@ -2,7 +2,7 @@
  * CFilter.h
  *
  *  Created on: 11.09.2019
- *      Author: Wirth
+ *      Author: Chaithra Mahadeva
  */
 
 /**

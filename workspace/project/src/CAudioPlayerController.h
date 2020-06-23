@@ -2,7 +2,7 @@
  * CAudioPlayerController.h
  *
  *  Created on: 09.01.2020
- *      Author: Wirth
+ *      Author: Chaithra Mahadeva
  */
 
 #ifndef SRC_CAUDIOPLAYERCONTROLLER_H_
@@ -25,7 +25,7 @@ private:
     CSoundFileDB m_soundColl;
     CAudioStreamOut m_audiostream;
 	CSoundFile* m_pSFile;
-	// toDo add the other parts of the controller (see UML Class diagram)
+	// add the other parts of the controller (see UML Class diagram)
 
 public:
 	CAudioPlayerController();
@@ -40,7 +40,7 @@ private:
 	void chooseAmplitudescale();
 	void manageSoundCollection();
 	void manageFilterCollection();
-	// toDo add the other methods of the controller (see UML class diagram)
+	// add the other methods of the controller (see UML class diagram)
 };
 
 #endif /* SRC_CAUDIOPLAYERCONTROLLER_H_ */

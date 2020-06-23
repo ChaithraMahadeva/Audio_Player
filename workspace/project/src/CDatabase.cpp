@@ -1,10 +1,9 @@
-// SGSE-Labor
-// CDatabaseRahmen.cpp
-// Framework-Klasse für den Zugriff von C++-Programmen über ODBC 
-// auf einfache Datenbanken
+// CDatabase.cpp
+// Author: Chaithra Mahadeva
+// 
 // 
 ////////////////////////////////////////////////////////////////////////////////
-// Header-Dateien
+// Header Data
 #include <iostream>	
 #include <iomanip>
 #include <stdlib.h>
@@ -14,8 +13,7 @@ using namespace std;
 #include "CDatabase.h"		
 
 ////////////////////////////////////////////////////////////////////////////////
-// CDatabase-Rahmen-Klasse
-// Konstruktor
+// Constructor
 CDatabase::CDatabase()
 {
 	m_hDBEnv=NULL;				
@@ -31,21 +29,21 @@ CDatabase::~CDatabase()
 	close();
 }
 
-// öffnet die Datenbank
+// open Database
 bool CDatabase::open(const char* pDB, const char* pUsr, const char* pPwd)
 {
 	if(m_eState==DB_S_CONNECTED)	// Zustand prüfen
 		return true;
 
-	m_eState=DB_S_CONNECTED;		// Zustand testweise auf connected setzen
-	// Environment-Handle holen
+	m_eState=DB_S_CONNECTED;		// DB connected
+	// Environment-Handle
 	SQLRETURN ret= SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &m_hDBEnv);
 	if(SQL_SUCCESS != ret && SQL_SUCCESS_WITH_INFO != ret){
 		_showSQLError( "open (environment handle)", ret, m_hDBEnv, SQL_HANDLE_ENV);
 		close();
 		return false;
 	}
-	// minimale ODBC-Version setzen
+	// set ODBC version
 	ret = SQLSetEnvAttr( m_hDBEnv, SQL_ATTR_ODBC_VERSION, (SQLPOINTER)SQL_OV_ODBC3, 0);
 	if(SQL_SUCCESS != ret && SQL_SUCCESS_WITH_INFO != ret){
 		_showSQLError( "open (set ODBC-Version)", ret, m_hDBEnv, SQL_HANDLE_ENV);
@@ -53,7 +51,7 @@ bool CDatabase::open(const char* pDB, const char* pUsr, const char* pPwd)
 		return false;
 	}
 
-	// Connection-Handle holen
+	// Connection handle
 	ret = SQLAllocHandle(SQL_HANDLE_DBC, m_hDBEnv, &m_hDBC);
 	if(SQL_SUCCESS != ret && SQL_SUCCESS_WITH_INFO != ret){
 		_showSQLError( "open (connection handle)", ret, m_hDBEnv, SQL_HANDLE_ENV);
@@ -61,7 +59,7 @@ bool CDatabase::open(const char* pDB, const char* pUsr, const char* pPwd)
 		return false;
 	}
 
-	// verbinden
+	// get Data
 	ret = SQLConnect(m_hDBC, (SQLCHAR*)pDB, SQL_NTS, (SQLCHAR*) pUsr, SQL_NTS, (SQLCHAR*) pPwd, SQL_NTS);
 	if(SQL_SUCCESS != ret && SQL_SUCCESS_WITH_INFO != ret){
 		_showSQLError( "open (connect)", ret, m_hDBC, SQL_HANDLE_DBC);
@@ -69,7 +67,7 @@ bool CDatabase::open(const char* pDB, const char* pUsr, const char* pPwd)
 		return false;
 	}
 
-	// Statement-Handle holen
+	// Statement Handle
 	ret = SQLAllocHandle(SQL_HANDLE_STMT, m_hDBC, &m_hStmt);
 	if(SQL_SUCCESS != ret && SQL_SUCCESS_WITH_INFO != ret){
 		_showSQLError( "open (statement handle)", ret, m_hDBC, SQL_HANDLE_DBC);
@@ -79,7 +77,7 @@ bool CDatabase::open(const char* pDB, const char* pUsr, const char* pPwd)
 	return true;
 }
 
-// gibt alle Handles frei und schließt die Verbindung zur Datenbank
+// check handles while closing
 void CDatabase::close()
 {
 	if(m_eState==DB_S_NOTREADY) // Zustand prüfen
@@ -104,40 +102,40 @@ void CDatabase::close()
 	return;
 }
 
-// holt einen Datensatz aus der Datenbank
-// zuvor muss eine doSelectAction erfolgreich ausgeführt worden sein, die die passenden Attribute 
-// der Dataset-Klasse mit BindCol an die Attribute der Dataset-Klasse bindet und das DB-Objekt 
-// in den Zustand DBFETCH überführt (sonst stehen keine Datensätze zur Abholung bereit)
-// jeder erfolgreiche fetch-Aufruf überträgt die Daten eines Datensatzes in die gebundenen Attribute 
-// des CDataset-Objektes
+// fetches a record from the database
+// a doSelectAction must have been executed successfully before, which has the appropriate attributes 
+// of the dataset class binds to the attributes of the dataset class with BindCol and the DB object 
+// is transferred to the DBFETCH state (otherwise no data records are available for retrieval)
+// each successful fetch call transfers the data of a record into the bound attributes 
+// of the CDataset object
 bool CDatabase::fetch()
 {
 	if(m_eState!=DB_S_FETCH)		
 		return false;
 
 	SQLRETURN ret;
-	ret = SQLFetch( m_hStmt);	//Daten holen
-	if ((ret == SQL_SUCCESS) || (ret == SQL_SUCCESS_WITH_INFO)) // Daten geholt
+	ret = SQLFetch( m_hStmt);	//Data
+	if ((ret == SQL_SUCCESS) || (ret == SQL_SUCCESS_WITH_INFO)) 
 		return true;
-	else if(ret == SQL_NO_DATA)	// keine Daten da
+	else if(ret == SQL_NO_DATA)	// no data
 		return false;
-	else						// Fehler
+	else						// error
 	{
 		_showSQLError( "FetchQuery", ret, m_hStmt, SQL_HANDLE_STMT);
 		return false;
 	}
 }
 
-// Zum Abschluss einer Datenbank-Aktion muss das Statement-Handle
-// wieder in den Ausgangszustand versetzt werden
+// To complete a database action, the statement handle
+// be returned to the initial state
 void CDatabase::closeQuery( void )
 {
-	SQLFreeStmt( m_hStmt, SQL_UNBIND);	// Bindungen aufheben
-	SQLFreeStmt( m_hStmt, SQL_CLOSE);	// Statement-Handle zurücksetzen
-	m_eState=DB_S_CONNECTED;			// DB-Verbindung ist bereit für nächste DB-Aktion 
+	SQLFreeStmt( m_hStmt, SQL_UNBIND);	// Untie
+	SQLFreeStmt( m_hStmt, SQL_CLOSE);	// Reset statement handle
+	m_eState=DB_S_CONNECTED;			// DB connection is ready for next DB action
 }
 
-// Zustand anzeigen
+// Display status
 string CDatabase::showState( void )
 {
 	string statemsg="current state: ";
@@ -183,7 +181,7 @@ bool CDatabase::_executeSQLStmt(string sSQLStmt, string errText, bool isSelectSt
 
 
 //**
-// private Methoden
+// private Method
 //**
 int CDatabase::_getNativeErrorCode(SQLRETURN rc, SQLHANDLE hndl, int type)
 {
@@ -195,14 +193,14 @@ int CDatabase::_getNativeErrorCode(SQLRETURN rc, SQLHANDLE hndl, int type)
 	{
 		/*
 		SQLRETURN SQLGetDiagRec(
-		SQLSMALLINT     HandleType,		// (in) SQL_HANDLE_ENV, SQL_HANDLE_DBC, SQL_HANDLE_STMT, SQL_HANDLE_DESC
-		SQLHANDLE       Handle,			// (in) Handle des Typs
-		SQLSMALLINT     RecNumber,		// (in) Nummer des Diagnostik-Datensatzes (bei 1 beginnend)
-		SQLCHAR *       SQLState,		// (out) Code für die Fehlerursache
-		SQLINTEGER *    NativeErrorPtr,	// (out) Fehlercode
-		SQLCHAR *       MessageText,	// (out) Fehlertext-Puffer
-		SQLSMALLINT     BufferLength,	// (in)  max. Fehlertext-Länge
-		SQLSMALLINT *   TextLengthPtr);	// (out) tatsächliche Fehlertext-Länge
+		SQLSMALLINT HandleType, // (in) SQL_HANDLE_ENV, SQL_HANDLE_DBC, SQL_HANDLE_STMT, SQL_HANDLE_DESC
+		SQLHANDLE Handle, // (in) Handle of type
+		SQLSMALLINT RecNumber, // (in) Number of the diagnostic data record (starting with 1)
+		SQLCHAR * SQLState, // (out) Code for the error cause
+		SQLINTEGER * NativeErrorPtr, // (out) Error code
+		SQLCHAR * MessageText, // (out) Error text buffer
+		SQLSMALLINT BufferLength, // (in) max. error text length
+		SQLSMALLINT * TextLengthPtr); // (out) actual error text length
 		*/
 		while (SQLGetDiagRec( type, hndl, i, SqlState, &NativeError,
 				Msg, sizeof(Msg), &MsgLen) == SQL_NO_DATA) i++;
@@ -211,11 +209,11 @@ int CDatabase::_getNativeErrorCode(SQLRETURN rc, SQLHANDLE hndl, int type)
 }
 
 
-// gibt die zu einem Fehlercode passende Fehlermeldung auf dem Bildschirm aus
-// infotxt ... freier Text, der z.B. den Namen der Methode enthält, in der der Fehler aufgetreten ist
-// rc ........ Fehlercode
-// hndl ...... Handle, bei dessen Benutzung der Fehler aufgetreten ist
-// type ...... Typ des Handle
+// displays the error message corresponding to an error code on the screen
+// infotxt ... Free text, which contains, for example, the name of the method in which the error occurred
+// rc ....... Error code
+// hndl ..... Handle in whose use the error occurred
+// type ...... Type of the handle
 void CDatabase::_showSQLError( const char* infotxt, SQLRETURN rc, SQLHANDLE hndl, int type)
 {
 	SQLCHAR SqlState[6], Msg[ SQL_MAX_MESSAGE_LENGTH];
@@ -227,14 +225,14 @@ void CDatabase::_showSQLError( const char* infotxt, SQLRETURN rc, SQLHANDLE hndl
 		i = 1;
 		/*
 		SQLRETURN SQLGetDiagRec(
-		SQLSMALLINT     HandleType,		// (in) SQL_HANDLE_ENV, SQL_HANDLE_DBC, SQL_HANDLE_STMT, SQL_HANDLE_DESC
-		SQLHANDLE       Handle,			// (in) Handle des Typs
-		SQLSMALLINT     RecNumber,		// (in) Nummer des Diagnostik-Datensatzes (bei 1 beginnend)
-		SQLCHAR *       SQLState,		// (out) Code für die Fehlerursache
-		SQLINTEGER *    NativeErrorPtr,	// (out) Fehlercode
-		SQLCHAR *       MessageText,	// (out) Fehlertext-Puffer
-		SQLSMALLINT     BufferLength,	// (in)  max. Fehlertext-Länge
-		SQLSMALLINT *   TextLengthPtr);	// (out) tatsächliche Fehlertext-Länge
+		SQLSMALLINT HandleType, // (in) SQL_HANDLE_ENV, SQL_HANDLE_DBC, SQL_HANDLE_STMT, SQL_HANDLE_DESC
+		SQLHANDLE Handle, // (in) Handle of type
+		SQLSMALLINT RecNumber, // (in) Number of the diagnostic data record (starting with 1)
+		SQLCHAR * SQLState, // (out) Code for the error cause
+		SQLINTEGER * NativeErrorPtr, // (out) Error code
+		SQLCHAR * MessageText, // (out) Error text buffer
+		SQLSMALLINT BufferLength, // (in) max. error text length
+		SQLSMALLINT * TextLengthPtr); // (out) actual error text length
 		*/
 		while (SQLGetDiagRec( type, hndl, i, SqlState, &NativeError,
 				Msg, sizeof(Msg), &MsgLen) != SQL_NO_DATA)

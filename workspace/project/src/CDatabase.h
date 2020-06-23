@@ -1,6 +1,6 @@
 //////////////////////////
-// ASDD Lab
 // Database base class - to access databases via the ODBC API
+// Author: Chaithra Mahadeva
 
 #ifndef CDatabase_H	
 #define CDatabase_H

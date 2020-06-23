@@ -2,7 +2,7 @@
  * CSoundFileDB.cpp
  *
  *  Created on: Jan 18, 2020
- *      Author: Admin
+ *      Author: Chaithra Mahadeva
  */
 
 #include "CSoundFileDB.h"
